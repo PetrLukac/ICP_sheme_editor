@@ -50,8 +50,10 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../scheme_editor/main.cpp qrc_qml.cpp
+SOURCES       = ../scheme_editor/main.cpp \
+		../scheme_editor/schemecontainer.cpp qrc_qml.cpp
 OBJECTS       = main.o \
+		schemecontainer.o \
 		qrc_qml.o
 DIST          = /opt/Qt/5.9.5/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/common/unix.conf \
@@ -214,6 +216,7 @@ DIST          = /opt/Qt/5.9.5/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/spec_post.prf \
+		../scheme_editor/.qmake.stash \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/default_pre.prf \
@@ -232,7 +235,8 @@ DIST          = /opt/Qt/5.9.5/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/exceptions.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/yacc.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/lex.prf \
-		../scheme_editor/scheme_editor.pro  ../scheme_editor/main.cpp
+		../scheme_editor/scheme_editor.pro ../scheme_editor/schemecontainer.h ../scheme_editor/main.cpp \
+		../scheme_editor/schemecontainer.cpp
 QMAKE_TARGET  = scheme_editor
 DESTDIR       = 
 TARGET        = scheme_editor
@@ -405,6 +409,7 @@ Makefile: ../scheme_editor/scheme_editor.pro /opt/Qt/5.9.5/gcc_64/mkspecs/linux-
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/Qt/5.9.5/gcc_64/mkspecs/features/default_pre.prf \
@@ -592,6 +597,7 @@ Makefile: ../scheme_editor/scheme_editor.pro /opt/Qt/5.9.5/gcc_64/mkspecs/linux-
 /opt/Qt/5.9.5/gcc_64/mkspecs/features/qt_config.prf:
 /opt/Qt/5.9.5/gcc_64/mkspecs/linux-g++/qmake.conf:
 /opt/Qt/5.9.5/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /opt/Qt/5.9.5/gcc_64/mkspecs/features/exclusive_builds.prf:
 /opt/Qt/5.9.5/gcc_64/mkspecs/features/toolchain.prf:
 /opt/Qt/5.9.5/gcc_64/mkspecs/features/default_pre.prf:
@@ -633,7 +639,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../scheme_editor/qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/Qt/5.9.5/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../scheme_editor/main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../scheme_editor/schemecontainer.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../scheme_editor/main.cpp ../scheme_editor/schemecontainer.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -775,6 +782,56 @@ main.o: ../scheme_editor/main.cpp /opt/Qt/5.9.5/gcc_64/include/QtGui/QGuiApplica
 		/opt/Qt/5.9.5/gcc_64/include/QtQml/qqmlerror.h \
 		/opt/Qt/5.9.5/gcc_64/include/QtQml/qqmldebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../scheme_editor/main.cpp
+
+schemecontainer.o: ../scheme_editor/schemecontainer.cpp ../scheme_editor/schemecontainer.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/QObject \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qobject.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qtcore-config.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qnumeric.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qversiontagging.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qhashfunctions.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qbytearraylist.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qstringlist.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qregexp.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qmetatype.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/Qt/5.9.5/gcc_64/include/QtCore/qobject_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o schemecontainer.o ../scheme_editor/schemecontainer.cpp
 
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp

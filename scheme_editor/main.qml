@@ -19,7 +19,7 @@ Window {
             id: topPanel
             width: maximumWidth
             height: 100
-            color: "blue"
+            color: "#2377ff"
             border.width: 0
 
             Button{
@@ -40,18 +40,39 @@ Window {
                 color: "#141414"
 
                 Button{
-                    text: qsTr("AC")
+                    id: control
+                    text: qsTr("Button")
 
-                    width: maximumWidth
-                    background: Rectangle{
-                        color: "#999999"
+                    contentItem: Text {
+                        text: control.text
+                        font: control.font
+                        opacity: enabled ? 1.0 : 0.3
+                        color: control.down ? "black" : "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: maximumWidth
+                        implicitHeight: 40
+                        opacity: enabled ? 1 : 0.3
+                        color: control.down ? "#999999" : "#5e5e5e"
                     }
                 }
+                /*
+                Rectangle {
+                    color: "#999999"
+                    Button {
+                        text: qsTr("AC")
+                    }
+                }*/
             }
             Rectangle{
+                id: schemeSpace
                 width: maximumWidth
                 height: maximumHeight
-                color: "#d5cee8"
+                color: "#dde1ff"
             }
         }
     }
