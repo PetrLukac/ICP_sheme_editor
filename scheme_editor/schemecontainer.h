@@ -2,11 +2,21 @@
 #define SCHEMECONTAINER_H
 
 #include <QObject>
+#include <string>
+#include <iostream>
+#include <QString>
 
-class schemeContainer
+class SchemeContainer : public QObject
 {
+    Q_OBJECT
 public:
-    schemeContainer();
+    explicit SchemeContainer(QObject *parent = nullptr);
+
+    Q_INVOKABLE void addBlock(QString blockName);
+
+signals:
+
+public slots:
 };
 
 #endif // SCHEMECONTAINER_H

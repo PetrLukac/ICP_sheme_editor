@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.2
 
 Window {
+    //id: root
+    objectName: "o_root"
     visible: true
     width: 1024
     height: 720
@@ -29,7 +31,7 @@ Window {
 
         RowLayout{
             id: blockPanel
-            anchors.top: topPanel
+            //anchors.top: topPanel
             anchors.topMargin: 0
             height: 620
             spacing: 0
@@ -59,6 +61,11 @@ Window {
                         opacity: enabled ? 1 : 0.3
                         color: control.down ? "#999999" : "#5e5e5e"
                     }
+
+                    onClicked: {
+                        container.addBlock("add")
+
+                    }
                 }
                 /*
                 Rectangle {
@@ -70,6 +77,7 @@ Window {
             }
             Rectangle{
                 id: schemeSpace
+                objectName: "o_schemeSpace"
                 width: maximumWidth
                 height: maximumHeight
                 color: "#dde1ff"
