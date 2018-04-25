@@ -25,8 +25,14 @@ int main(int argc, char *argv[])
         else
             std::cout << "empty rect" << std::endl;*/
     QObject* m = engine.rootObjects().at(0);
-    std::cout << "Do i have a window in my hand ?: " << m->isWindowType() << std::endl;
-    std::cout << "My name is not Johny but: " << m->objectName().toStdString() << std::endl;
+    //std::cout << "Do i have a window in my hand ?: " << m->isWindowType() << std::endl;
+    //std::cout << "My name is not Johny but: " << m->objectName().toStdString() << std::endl;
+    //std::cout << "I have: " << m->children().at(1)->objectName().toStdString() << std::endl;
+    QObject* column = m->findChild<QObject*>("o_root_column");
+    QObject* row = column->findChild<QObject*>("o_root_row");
+    QObject* scheme = row->findChild<QObject*>("o_schemeSpace");
+    //std::cout << "I have: " << scheme->children().count() << std::endl;
+    container.data()->passTheSchemePtr(scheme);
 
     return app.exec();
 }

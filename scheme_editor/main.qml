@@ -13,7 +13,7 @@ Window {
     color: "white"
 
     ColumnLayout{
-
+        objectName: "o_root_column"
         width: maximumWidth
         height: 720
         spacing: 0
@@ -30,6 +30,7 @@ Window {
         }
 
         RowLayout{
+            objectName: "o_root_row"
             id: blockPanel
             //anchors.top: topPanel
             anchors.topMargin: 0
@@ -43,7 +44,7 @@ Window {
 
                 Button{
                     id: control
-                    text: qsTr("Button")
+                    text: qsTr("ADD")
 
                     contentItem: Text {
                         text: control.text
@@ -63,24 +64,19 @@ Window {
                     }
 
                     onClicked: {
+                        var component;
+                        component = Qt.createComponent("add.qml");
+                        component.createObject(schemeSpace)
                         container.addBlock("add")
-
                     }
                 }
-                /*
-                Rectangle {
-                    color: "#999999"
-                    Button {
-                        text: qsTr("AC")
-                    }
-                }*/
             }
             Rectangle{
                 id: schemeSpace
                 objectName: "o_schemeSpace"
                 width: maximumWidth
                 height: maximumHeight
-                color: "#dde1ff"
+                color: "#f9f9f9"
             }
         }
     }
