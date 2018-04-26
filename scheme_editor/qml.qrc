@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>add.qml</file>
+        <file>connection.qml</file>
     </qresource>
 </RCC>

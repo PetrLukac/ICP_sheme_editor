@@ -9,6 +9,8 @@ Rectangle{
     //objectName: "addme"
     width: 220; height: 140
     color:"#e5e5e5"
+    x: 10
+    y: 10
     MouseArea {
          width: 220
          height: 30
@@ -67,6 +69,14 @@ Rectangle{
             implicitHeight: parent.height
             color: port_1.down ? "#999999" : "#5e5e5e"
         }
+        onClicked: {
+            if( container.addInputConnection(rec.objectName, 1) === 1){
+                var component;
+                component = Qt.createComponent("connection.qml");
+                component.createObject(schemeSpace)
+                container.registerConnection()
+            }
+        }
     }
     // Input 2
     Button{
@@ -86,6 +96,14 @@ Rectangle{
             implicitHeight: parent.height
             color: port_2.down ? "#999999" : "#5e5e5e"
         }
+        onClicked: {
+            if( container.addInputConnection(rec.objectName, 2) === 1){
+                var component;
+                component = Qt.createComponent("connection.qml");
+                component.createObject(schemeSpace)
+                container.registerConnection()
+            }
+        }
     }
     // Output
     Button{
@@ -104,6 +122,14 @@ Rectangle{
             implicitWidth: parent.width
             implicitHeight: parent.height
             color: port_3.down ? "#999999" : "#5e5e5e"
+        }
+        onClicked: {
+            if( container.addOutputConnection(rec.objectName) === 1){
+                var component;
+                component = Qt.createComponent("connection.qml");
+                component.createObject(schemeSpace)
+                container.registerConnection()
+            }
         }
     }
     // Operation
