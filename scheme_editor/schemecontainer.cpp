@@ -1,5 +1,9 @@
 #include "schemecontainer.h"
 
+
+void moveConnectionStart(QObject* connection, int x, int y);
+void moveConnectionEnd(QObject* connection, int x, int y, int portNumer);
+
 SchemeContainer::SchemeContainer(QObject *parent) : QObject(parent)
 {
 
@@ -14,6 +18,8 @@ void SchemeContainer::addBlock(QString blockName){
     QObject* block = schemePlane->children().at(lastObject-1);
     //block = block->findChild<QObject*>("addme");
     blockCounter++;
+    block->setProperty("id_d", blockCounter);
+    block->setProperty("type", 0);
     block->setObjectName("Block_"+QString::number(blockCounter));
 }
 
@@ -21,9 +27,48 @@ void SchemeContainer::passTheSchemePtr(QObject* q){
     this->schemePlane = q;
 }
 
-void SchemeContainer::dragDetected(){
-    std::cout << "dragged !" << std::endl;
+void SchemeContainer::dragDetected(int x, int y, int id){
+    std::cout << "dragged: " << x << " " << y <<  std::endl;
+    QList<QObject*> srcConnection;
+    QList<QObject*> dstConnection;
+    for(int i = 0; i < schemePlane->children().count(); i++){
+        QObject* o = schemePlane->children().at(i);
+        if( o->property("type") == 1){
+            if( o->property("dst") == id)
+                srcConnection.append(o);
+            if( o->property("src") == id)
+                dstConnection.append(o);
+        }
+    }
+    std::cout << srcConnection.length() << " " << dstConnection.length() << std::endl;
+    for( int i = 0; i < srcConnection.length(); i++ ){
+        QObject* o = srcConnection.at(i);
+        moveConnectionEnd(o, x, y, o->property("dstPort").toInt());
+    }
+    for( int i = 0; i < dstConnection.length(); i++ ){
+        QObject* o = dstConnection.at(i);
+        moveConnectionStart(o, x, y);
+    }
 }
+
+int SchemeContainer::deleteConnections(int id){
+    QList<QObject*> connectionToDelete;
+    for(int i = 0; i < schemePlane->children().count(); i++){
+        QObject* o = schemePlane->children().at(i);
+        if( o->property("type") == 1){
+            if( o->property("dst") == id)
+                connectionToDelete.append(o);
+            if( o->property("src") == id)
+                connectionToDelete.append(o);
+        }
+    }
+    for( int i = 0; i < connectionToDelete.length(); i++ ){
+        QObject* o = connectionToDelete.at(i);
+        o->deleteLater();
+    }
+    return 1;
+}
+
 
 int SchemeContainer::addInputConnection(QString block, int port){
     if( draggingOutput == 0 ){
@@ -70,18 +115,29 @@ int SchemeContainer::objectCount(){
 int SchemeContainer::registerConnection(){
     int lastObject = schemePlane->children().count();
     QObject* connection = schemePlane->children().at(lastObject-1);
-    connection->setObjectName(outputNode + "|" + inputNode + "|" + QString::number(connectionPort) );
-    connection = connection->findChild<QObject*>("view");
+    /*connection = connection->findChild<QObject*>("view");
     connection = connection->findChild<QObject*>("start");
     QObject* start = connection;
     connection = connection->findChild<QObject*>("end");
     QObject* end = connection;
-    //std::cout << "pos " << connection->property("x").toInt() << std::endl;
+    //std::cout << "pos " << connection->property("x").toInt() << std::endl;*/
     QObject* src = schemePlane->findChild<QObject*>(outputNode);
     QObject* dst = schemePlane->findChild<QObject*>(inputNode);
     std::cout << "pos " << src->property("x").toInt() << " " << src->property("y").toInt() << std::endl;
     std::cout << "pos " << dst->property("x").toInt() << " " << dst->property("y").toInt() << std::endl;
-    start->setProperty("startX", src->property("x").toInt() + 210 );
+
+    moveConnectionStart(connection, src->property("x").toInt(), src->property("y").toInt());
+    moveConnectionEnd(connection, dst->property("x").toInt(), dst->property("y").toInt(), connectionPort);
+
+    connection->setObjectName(outputNode + "|" + inputNode + "|" + QString::number(connectionPort) );
+    connectionCounter++;
+    connection->setProperty("id_d",connectionCounter);
+    connection->setProperty("type", 1 );
+    connection->setProperty("src", src->property("id_d").toInt() );
+    connection->setProperty("dst", dst->property("id_d").toInt() );
+    connection->setProperty("dstPort", connectionPort );
+
+    /*start->setProperty("startX", src->property("x").toInt() + 210 );
     start->setProperty("startY", src->property("y").toInt() + 80 );
     if( connectionPort == 1 ){
         end->setProperty("x", dst->property("x").toInt() + 10 );
@@ -90,6 +146,28 @@ int SchemeContainer::registerConnection(){
     if( connectionPort == 2 ){
         end->setProperty("x", dst->property("x").toInt() + 10 );
         end->setProperty("y", dst->property("y").toInt() + 105 );
-    }
+    }*/
+
     return 1;
+}
+
+void moveConnectionStart(QObject* connection, int x, int y){
+    connection = connection->findChild<QObject*>("view");
+    connection = connection->findChild<QObject*>("start");
+    connection->setProperty("startX", x + 210 );
+    connection->setProperty("startY", y + 80 );
+}
+
+
+void moveConnectionEnd(QObject* connection, int x, int y, int portNumer){
+    int offset = 55;
+    for( int i = 1; i < portNumer; i++ )
+        offset += 50;
+
+    connection = connection->findChild<QObject*>("view");
+    connection = connection->findChild<QObject*>("start");
+    connection = connection->findChild<QObject*>("end");
+    connection->setProperty("x", x + 10 );
+    connection->setProperty("y", y + offset );
+
 }

@@ -17,6 +17,7 @@ class SchemeContainer : public QObject
 
     QObject *schemePlane;
     int blockCounter = 0;
+    int connectionCounter = 0;
 
     int draggingInput = 0;
     int draggingOutput = 0;
@@ -34,7 +35,7 @@ public:
 
     void passTheSchemePtr(QObject* q);
 
-    Q_INVOKABLE void dragDetected();
+    Q_INVOKABLE void dragDetected(int x, int y, int id);
 
     Q_INVOKABLE int addInputConnection(QString block, int port);
 
@@ -43,6 +44,8 @@ public:
     Q_INVOKABLE int objectCount();
 
     Q_INVOKABLE int registerConnection();
+
+    Q_INVOKABLE int deleteConnections(int id);
 
 signals:
 

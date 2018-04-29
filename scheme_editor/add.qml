@@ -7,16 +7,27 @@ Rectangle{
     id: rec
     //property int draggedIndex: 0
     //objectName: "addme"
+    property int id_d: 0
+    property int type: 0
+    property int input1Connected: 0
+    property int input2Connected: 0
+    property int dstPort: 0
+
     width: 220; height: 140
     color:"#e5e5e5"
     x: 10
     y: 10
+
     MouseArea {
          width: 220
          height: 30
 
          drag.target: parent
          cursorShape: drag.active ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+         onPositionChanged: {
+            container.dragDetected(rec.x, rec.y, rec.id_d);
+         }
+
 
     }
     ColumnLayout{
@@ -27,7 +38,10 @@ Rectangle{
                 color: "#16cee2"
                 Button{
                     //text: "X"
-                    onClicked: rec.destroy();
+                    onClicked:{
+                        container.deleteConnections(rec.id_d)
+                        rec.destroy();
+                    }
                     x: 190
                     width: 30
                     height: 30
@@ -70,12 +84,15 @@ Rectangle{
             color: port_1.down ? "#999999" : "#5e5e5e"
         }
         onClicked: {
-            if( container.addInputConnection(rec.objectName, 1) === 1){
-                var component;
-                component = Qt.createComponent("connection.qml");
-                component.createObject(schemeSpace)
-                container.registerConnection()
-            }
+
+                if( container.addInputConnection(rec.objectName, 1) === 1){
+                    var component;
+                    component = Qt.createComponent("connection.qml");
+                    component.createObject(schemeSpace)
+                    container.registerConnection()
+
+                }
+
         }
     }
     // Input 2
@@ -97,12 +114,15 @@ Rectangle{
             color: port_2.down ? "#999999" : "#5e5e5e"
         }
         onClicked: {
-            if( container.addInputConnection(rec.objectName, 2) === 1){
-                var component;
-                component = Qt.createComponent("connection.qml");
-                component.createObject(schemeSpace)
-                container.registerConnection()
-            }
+
+                if( container.addInputConnection(rec.objectName, 2) === 1){
+                    var component;
+                    component = Qt.createComponent("connection.qml");
+                    component.createObject(schemeSpace)
+                    container.registerConnection()
+
+                }
+
         }
     }
     // Output

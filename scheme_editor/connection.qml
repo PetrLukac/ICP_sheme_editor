@@ -2,6 +2,10 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 
 Item{
+    property int id_d: 0
+    property int type: 0
+    property int src: 0
+    property int dst: 0
     id: r
     PathView {
         objectName: "view"
@@ -29,8 +33,8 @@ Item{
         }
     }
     Button{
-        x: (path.startX + cub.x)/2
-        y:  (path.startY + cub.y)/2
+        x: ((path.startX + cub.x)/2) - 12
+        y:  ((path.startY + cub.y)/2) - 12
         contentItem: Text {
             font.pointSize: 8
             verticalAlignment: Text.AlignVCenter
