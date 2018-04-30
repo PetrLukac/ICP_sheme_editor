@@ -71,6 +71,16 @@ int SchemeContainer::deleteConnections(int id){
 
 
 int SchemeContainer::addInputConnection(QString block, int port){
+    QObject* node =  schemePlane->findChild<QObject*>(block);
+    int id = node->property("id_d").toInt();
+    for(int i = 0; i < schemePlane->children().count(); i++){
+        QObject* o = schemePlane->children().at(i);
+        if( o->property("type") == 1){
+            if( o->property("dst") == id && o->property("dstPort") == port )
+                return 0;
+        }
+    }
+
     if( draggingOutput == 0 ){
         std::cout << "dragging input from: " << block.toStdString() << " port: " << port << std::endl;
         draggingInput = 1;
