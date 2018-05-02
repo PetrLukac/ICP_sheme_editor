@@ -11,6 +11,8 @@
 #include <QRect>
 #include <QList>
 
+#include "schemeprocessor.h"
+
 class SchemeContainer : public QObject
 {
     Q_OBJECT
@@ -46,6 +48,8 @@ public:
     Q_INVOKABLE int registerConnection();
 
     Q_INVOKABLE int deleteConnections(int id);
+
+    Q_INVOKABLE void schemeStart();
 
 signals:
 

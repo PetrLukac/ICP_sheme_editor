@@ -19,7 +19,7 @@ void SchemeContainer::addBlock(QString blockName){
     //block = block->findChild<QObject*>("addme");
     blockCounter++;
     block->setProperty("id_d", blockCounter);
-    block->setProperty("type", 0);
+    block->setProperty("type", 2);
     block->setObjectName("Block_"+QString::number(blockCounter));
 }
 
@@ -28,7 +28,7 @@ void SchemeContainer::passTheSchemePtr(QObject* q){
 }
 
 void SchemeContainer::dragDetected(int x, int y, int id){
-    std::cout << "dragged: " << x << " " << y <<  std::endl;
+    //std::cout << "dragged: " << x << " " << y <<  std::endl;
     QList<QObject*> srcConnection;
     QList<QObject*> dstConnection;
     for(int i = 0; i < schemePlane->children().count(); i++){
@@ -40,7 +40,7 @@ void SchemeContainer::dragDetected(int x, int y, int id){
                 dstConnection.append(o);
         }
     }
-    std::cout << srcConnection.length() << " " << dstConnection.length() << std::endl;
+    //std::cout << srcConnection.length() << " " << dstConnection.length() << std::endl;
     for( int i = 0; i < srcConnection.length(); i++ ){
         QObject* o = srcConnection.at(i);
         moveConnectionEnd(o, x, y, o->property("dstPort").toInt());
@@ -180,4 +180,17 @@ void moveConnectionEnd(QObject* connection, int x, int y, int portNumer){
     connection->setProperty("x", x + 10 );
     connection->setProperty("y", y + offset );
 
+}
+
+
+
+
+void SchemeContainer::schemeStart(){
+    std::cout << "scheme started" << std::endl;
+    SchemeProcessor* proc = new SchemeProcessor(schemePlane);
+    proc->loadBlocks();
+    proc->loadConnections();
+    proc->connectBlocks();
+    proc->printSchema();
+    delete proc;
 }

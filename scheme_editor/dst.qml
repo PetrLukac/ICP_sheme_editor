@@ -11,8 +11,8 @@ Rectangle{
     property int type: 0
     property int input1Connected: 0
     property int input2Connected: 0
-    property string opcode: "add"
-    property int inputCount: 2
+    property string opcode: "dst"
+    property int inputCount: 1
 
     width: 220; height: 140
     color:"#e5e5e5"
@@ -91,72 +91,42 @@ Rectangle{
                     component = Qt.createComponent("connection.qml");
                     component.createObject(schemeSpace)
                     container.registerConnection()
+
                 }
 
         }
     }
-    // Input 2
-    Button{
-        id: port_2
-        height: 30
+
+    TextField{
         width: 60
+        height: 30
+        y: 40
+        x: 120
+        color: "white"
+        background: Rectangle {
+            implicitWidth: parent.width
+            implicitHeight: parent.height
+            color: parent.down ? "#999999" : "#5e5e5e"
+        }
+    }
+    TextField{
+        width: 60
+        height: 30
         y: 90
-        x: 0
-        contentItem: Text {
-            font.pointSize: 8
-            verticalAlignment: Text.AlignVCenter
-            text: "  Input 1"
-            color: "white"
-        }
+        x: 120
+        color: "white"
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height
-            color: port_2.down ? "#999999" : "#5e5e5e"
-        }
-        onClicked: {
-
-                if( container.addInputConnection(rec.objectName, 2) === 1){
-                    var component;
-                    component = Qt.createComponent("connection.qml");
-                    component.createObject(schemeSpace)
-                    container.registerConnection()
-
-                }
-
+            color: parent.down ? "#999999" : "#5e5e5e"
         }
     }
-    // Output
-    Button{
-        id: port_3
-        height: 30
-        width: 60
-        y: 65
-        x: 160
-        contentItem: Text {
-            font.pointSize: 8
-            verticalAlignment: Text.AlignVCenter
-            text: "Output  "
-            color: "white"
-        }
-        background: Rectangle {
-            implicitWidth: parent.width
-            implicitHeight: parent.height
-            color: port_3.down ? "#999999" : "#5e5e5e"
-        }
-        onClicked: {
-            if( container.addOutputConnection(rec.objectName) === 1){
-                var component;
-                component = Qt.createComponent("connection.qml");
-                component.createObject(schemeSpace)
-                container.registerConnection()
-            }
-        }
-    }
+
     // Operation
     Text{
-        text: "ADD"
+        text: "DST"
         color: "Black"
-        font.pointSize: 20
+        font.pointSize: 16
         x: 80
         y: 65
     }

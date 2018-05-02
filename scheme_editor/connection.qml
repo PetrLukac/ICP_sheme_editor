@@ -6,6 +6,7 @@ Item{
     property int type: 0
     property int src: 0
     property int dst: 0
+    property int dstPort: 0
     id: r
     PathView {
         objectName: "view"

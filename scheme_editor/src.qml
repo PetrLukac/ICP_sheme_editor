@@ -11,8 +11,8 @@ Rectangle{
     property int type: 0
     property int input1Connected: 0
     property int input2Connected: 0
-    property string opcode: "add"
-    property int inputCount: 2
+    property string opcode: "src"
+    property int inputCount: 0
 
     width: 220; height: 140
     color:"#e5e5e5"
@@ -66,65 +66,32 @@ Rectangle{
         }
 
     }
-    // Input 1
-    Button{
-        id: port_1
-        height: 30
+
+    TextField{
         width: 60
+        height: 30
         y: 40
-        x: 0
-        contentItem: Text {
-            font.pointSize: 8
-            verticalAlignment: Text.AlignVCenter
-            text: "  Input 1"
-            color: "white"
-        }
+        x: 20
+        color: "white"
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height
-            color: port_1.down ? "#999999" : "#5e5e5e"
-        }
-        onClicked: {
-
-                if( container.addInputConnection(rec.objectName, 1) === 1){
-                    var component;
-                    component = Qt.createComponent("connection.qml");
-                    component.createObject(schemeSpace)
-                    container.registerConnection()
-                }
-
+            color: parent.down ? "#999999" : "#5e5e5e"
         }
     }
-    // Input 2
-    Button{
-        id: port_2
-        height: 30
+    TextField{
         width: 60
+        height: 30
         y: 90
-        x: 0
-        contentItem: Text {
-            font.pointSize: 8
-            verticalAlignment: Text.AlignVCenter
-            text: "  Input 1"
-            color: "white"
-        }
+        x: 20
+        color: "white"
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height
-            color: port_2.down ? "#999999" : "#5e5e5e"
-        }
-        onClicked: {
-
-                if( container.addInputConnection(rec.objectName, 2) === 1){
-                    var component;
-                    component = Qt.createComponent("connection.qml");
-                    component.createObject(schemeSpace)
-                    container.registerConnection()
-
-                }
-
+            color: parent.down ? "#999999" : "#5e5e5e"
         }
     }
+
     // Output
     Button{
         id: port_3
@@ -154,10 +121,10 @@ Rectangle{
     }
     // Operation
     Text{
-        text: "ADD"
+        text: "SRC"
         color: "Black"
-        font.pointSize: 20
-        x: 80
+        font.pointSize: 16
+        x: 100
         y: 65
     }
 

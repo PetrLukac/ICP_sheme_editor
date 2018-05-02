@@ -14,7 +14,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    schemecontainer.cpp
+    schemecontainer.cpp \
+    schemeprocessor.cpp \
+    block.cpp
 
 RESOURCES += qml.qrc
 
@@ -30,4 +32,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    schemecontainer.h
+    schemecontainer.h \
+    schemeprocessor.h \
+    block.h

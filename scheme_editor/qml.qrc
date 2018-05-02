@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>add.qml</file>
         <file>connection.qml</file>
+        <file>src.qml</file>
+        <file>dst.qml</file>
     </qresource>
 </RCC>
