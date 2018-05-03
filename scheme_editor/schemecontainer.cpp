@@ -187,11 +187,16 @@ void moveConnectionEnd(QObject* connection, int x, int y, int portNumer){
 
 void SchemeContainer::schemeStart(){
     std::cout << "scheme started" << std::endl;
-    SchemeProcessor* proc = new SchemeProcessor(schemePlane);
+    proc = new SchemeProcessor(schemePlane);
     proc->loadBlocks();
     proc->loadConnections();
     proc->connectBlocks();
     proc->printSchema();
     proc->runSchema();
+    proc->saveBlocks();
     delete proc;
+}
+
+void SchemeContainer::delegateSave()
+{
 }

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <iostream>
 #include <vector>
+#include <fstream>
 #include "block.h"
 
 class SchemeProcessor
@@ -22,6 +23,8 @@ public:
     int connectBlocks();
     void printSchema();
     void runSchema();
+
+    void saveBlocks();
 };
 
 #endif // SCHEMEPROCESSOR_H

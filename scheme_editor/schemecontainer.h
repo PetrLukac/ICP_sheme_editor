@@ -29,6 +29,7 @@ class SchemeContainer : public QObject
     QString outputNode;
     QString inputNode;
     int connectionPort;
+    SchemeProcessor *proc;
 
 public:
     explicit SchemeContainer(QObject *parent = nullptr);
@@ -50,6 +51,8 @@ public:
     Q_INVOKABLE int deleteConnections(int id);
 
     Q_INVOKABLE void schemeStart();
+
+    Q_INVOKABLE void delegateSave();
 
 signals:
 

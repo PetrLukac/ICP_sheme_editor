@@ -82,3 +82,19 @@ void SchemeProcessor::runSchema(){
     }
 }
 
+void SchemeProcessor::saveBlocks()
+{
+    std::ofstream file;
+    file.open("schema",std::ios::out);
+
+    if(this->blocks.size() != 0)
+    {
+        for(Block * block: this->blocks)
+            file << (*block);
+    }
+    else
+        std::cerr << "Why this is null, ffs" << std::endl;
+
+
+}
+

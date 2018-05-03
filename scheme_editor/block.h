@@ -5,7 +5,9 @@
 #include <string>
 #include <vector>
 #include <iostream>
+
 #include "semantics.h"
+#include "saver.h"
 
 class Block
 {
@@ -23,7 +25,7 @@ private:
     std::vector<int> blockDone;
 
     int id_d;
-    QObject* qmlBlock;
+    QObject* qmlBlock;//TODO: Save some info to reconstruct
     int status = 0;
 
     int resultDone = 0;
@@ -33,7 +35,6 @@ private:
 public:
     Block();
     void setId(int id);
-    int getId();
 
     void addOutputBlocks(std::vector<Block*> blocks);
     void addOutputBlockIdAndPort(int id, int port);
@@ -41,9 +42,16 @@ public:
     void validateInputConnected(bool valid);
     void printContent();
 
-    int getStatus();
     void interate(int clk);
     void reciveData(double value, std::string type, int port, int clk);
+
+    friend std::ostream& operator<<(std::ostream& os, const Block& s);
+    friend std::istream& operator>>(std::istream& is, Block& s);
+
+    //Getters
+    int getId() const;
+    int getStatus() const;
+
 };
 
 #endif // BLOCK_H

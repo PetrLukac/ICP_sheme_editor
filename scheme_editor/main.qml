@@ -33,11 +33,15 @@ Window {
                 }
                 Button{
                     text: qsTr("Save")
+                    onClicked: {
+                        container.delegateSave();
+                    }
                 }
                 Button{
                     id: loadButton
                     text: qsTr("Load")
                 }
+
                 Rectangle{
                     width: 50
                 }
