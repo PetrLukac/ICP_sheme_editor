@@ -16,7 +16,8 @@ SOURCES += \
         main.cpp \
     schemecontainer.cpp \
     schemeprocessor.cpp \
-    block.cpp
+    block.cpp \
+    semantics.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,4 +35,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     schemecontainer.h \
     schemeprocessor.h \
-    block.h
+    block.h \
+    semantics.h
