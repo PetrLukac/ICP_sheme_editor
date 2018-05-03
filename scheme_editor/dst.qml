@@ -100,15 +100,13 @@ Rectangle{
     }
 
     TextField{
+        objectName: "valueField"
         width: 60
         height: 30
         y: 40
         x: 120
         color: "white"
-        Text {
-            text: "[value]"
-            color: "white"
-        }
+        text: "[value]"
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height
@@ -116,15 +114,13 @@ Rectangle{
         }
     }
     TextField{
+        objectName: "typeField"
         width: 60
         height: 30
         y: 90
         x: 120
         color: "white"
-        Text {
-            text: "[type]"
-            color: "white"
-        }
+        text: "[type]"
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height

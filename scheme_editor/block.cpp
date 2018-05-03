@@ -71,7 +71,7 @@ void Block::interate(int clk){
 
     if( resultDone == 1 ){
         status = 1;
-        for( int i = 0; i < recivedClk.size(); i++ ){
+        for( unsigned i = 0; i < recivedClk.size(); i++ ){
             if( recivedClk.at(i) == 0 )
                 status = 0;
             if( recivedClk.at(i) == clk )
@@ -80,7 +80,7 @@ void Block::interate(int clk){
     }
     if( status == 0 )
         return;
-    for( int i = 0; i < outputBlockId.size(); i++ ){
+    for( unsigned i = 0; i < outputBlockId.size(); i++ ){
         outputBlock.at(i)->reciveData( resultValue, resultType, outputBlockPort.at(i), clk );
     }
 
@@ -93,12 +93,23 @@ void Block::reciveData(double value, std::string type, int port, int clk){
     recivedClk.at(port-1) = clk;
 
     int allRecived = 1;
-    for( int i = 0; i < recivedClk.size(); i++ ){
+    for( unsigned i = 0; i < recivedClk.size(); i++ ){
         if( recivedClk.at(i) == 0 )
             allRecived = 0;
     }
     if( allRecived == 1 ){
-        // TODO semantics
-        std::cout << "id: " << id_d << " recived all";
+        if( opcode != "dst" ){
+            resultValue = Semantics::getInstance().computeData( portValue, portType, opcode );
+        }
+        else
+            resultValue = portValue.at(0);
+        resultDone = 1;
+        resultType = portType.at(0);
+        std::cout << "id: " << id_d << " recived all, value: " << resultValue << " type: " << resultType << std::endl;
+
+        if( opcode == "dst" ){
+            this->qmlBlock->findChild<QObject*>("valueField")->setProperty("text", resultValue);
+            this->qmlBlock->findChild<QObject*>("typeField")->setProperty("text", QString::fromStdString(resultType));
+        }
     }
 }
