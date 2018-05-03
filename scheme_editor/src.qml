@@ -32,8 +32,10 @@ Rectangle{
 
     }
     ColumnLayout{
+        objectName: "cl"
         width: 220
         Rectangle{
+                objectName: "top"
                 height: 30
                 width: 220
                 color: "#16cee2"
@@ -68,11 +70,13 @@ Rectangle{
     }
 
     TextField{
+        objectName: "valueField"
         width: 60
         height: 30
         y: 40
         x: 20
         color: "white"
+        text: "[value]"
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height
@@ -80,11 +84,13 @@ Rectangle{
         }
     }
     TextField{
+        objectName: "typeField"
         width: 60
         height: 30
         y: 90
         x: 20
         color: "white"
+        text: "[type]"
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height

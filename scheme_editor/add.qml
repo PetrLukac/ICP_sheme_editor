@@ -32,8 +32,10 @@ Rectangle{
 
     }
     ColumnLayout{
+        objectName: "cl"
         width: 220
         Rectangle{
+                objectName: "top"
                 height: 30
                 width: 220
                 color: "#16cee2"

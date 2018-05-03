@@ -32,8 +32,10 @@ Rectangle{
 
     }
     ColumnLayout{
+        objectName: "cl"
         width: 220
         Rectangle{
+                objectName: "top"
                 height: 30
                 width: 220
                 color: "#16cee2"
@@ -103,6 +105,10 @@ Rectangle{
         y: 40
         x: 120
         color: "white"
+        Text {
+            text: "[value]"
+            color: "white"
+        }
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height
@@ -115,6 +121,10 @@ Rectangle{
         y: 90
         x: 120
         color: "white"
+        Text {
+            text: "[type]"
+            color: "white"
+        }
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height

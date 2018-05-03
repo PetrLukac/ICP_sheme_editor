@@ -21,6 +21,7 @@ public:
     int loadConnections();
     int connectBlocks();
     void printSchema();
+    void runSchema();
 };
 
 #endif // SCHEMEPROCESSOR_H

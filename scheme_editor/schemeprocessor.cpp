@@ -48,14 +48,21 @@ int SchemeProcessor::connectBlocks(){
         b->setId(id);
         b->bindQmlBlock(o);
         b->validateInputConnected( (unsigned)inputCount == ports.size() );
+        std::vector<int> connectedBlocks;
 
         for( int j = 0; j < connectionList.length(); j++ ){
             QObject* c = connectionList.at(j);
-            if( c->property("src").toInt() == id )
+            if( c->property("src").toInt() == id ){
                 b->addOutputBlockIdAndPort( c->property("dst").toInt() , c->property("dstPort").toInt() );
+            }
         }
 
         blocks.push_back(b);
+    }
+
+    for( unsigned i = 0; i < blocks.size(); i++ ){
+        Block* b = blocks.at(i);
+        b->addOutputBlocks( blocks );
     }
 
     return 1;
@@ -64,6 +71,14 @@ int SchemeProcessor::connectBlocks(){
 void SchemeProcessor::printSchema(){
     for( unsigned i = 0; i < blocks.size(); i++){
         blocks.at(i)->printContent();
+    }
+}
+
+void SchemeProcessor::runSchema(){
+    for( unsigned clk = 1; clk < blocks.size() + 5; clk++ ){
+        for( int i = 0; i < blocks.size(); i++ ){
+            blocks.at(i)->interate(clk);
+        }
     }
 }
 

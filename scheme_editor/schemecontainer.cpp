@@ -192,5 +192,6 @@ void SchemeContainer::schemeStart(){
     proc->loadConnections();
     proc->connectBlocks();
     proc->printSchema();
+    proc->runSchema();
     delete proc;
 }
