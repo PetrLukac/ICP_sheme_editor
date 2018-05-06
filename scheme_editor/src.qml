@@ -1,3 +1,8 @@
+/*****
+  * file: src.qml
+  * author: Peter Lukac xlukac11
+  */
+
 import QtQuick 2.0
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.2
@@ -13,6 +18,7 @@ Rectangle{
     property int input2Connected: 0
     property string opcode: "src"
     property int inputCount: 0
+    property string file: "src.qml"
 
     width: 220; height: 140
     color:"#e5e5e5"

@@ -1,3 +1,7 @@
+/*****
+  * file: main.qml
+  * author: Peter Lukac xlukac11
+  */
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.2
@@ -46,6 +50,24 @@ Window {
                         var component = Qt.createComponent("dialog.qml");
                         var win = component.createObject(root);
                         win.show();
+
+                    }
+                }
+                Button{
+                    text: "Load loaded"
+                    onClicked: {
+                        container.loadAvailable()
+                    }
+                }
+                Button{
+                    text: "Fetch"
+                    onClicked: {
+                        var el = container.getElement()
+                        console.log("loading " + el)
+                        var component;
+                        component = Qt.createComponent(el);
+                        component.createObject(schemeSpace)
+                        container.registerElement()
                     }
                 }
 
@@ -167,6 +189,91 @@ Window {
                             component = Qt.createComponent("add.qml");
                             component.createObject(schemeSpace)
                             container.addBlock("add")
+                        }
+                    }
+                    // create sub block
+                    Button{
+                        text: qsTr("SUB")
+
+                        contentItem: Text {
+                            text: parent.text
+                            font: parent.font
+                            opacity: enabled ? 1.0 : 0.3
+                            color: parent.down ? "black" : "white"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 200
+                            implicitHeight: 40
+                            opacity: enabled ? 1 : 0.3
+                            color: parent.down ? "#999999" : "#5e5e5e"
+                        }
+
+                        onClicked: {
+                            var component;
+                            component = Qt.createComponent("sub.qml");
+                            component.createObject(schemeSpace)
+                            container.addBlock("sub")
+                        }
+                    }
+                    // create mul block
+                    Button{
+                        text: qsTr("MUL")
+
+                        contentItem: Text {
+                            text: parent.text
+                            font: parent.font
+                            opacity: enabled ? 1.0 : 0.3
+                            color: parent.down ? "black" : "white"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 200
+                            implicitHeight: 40
+                            opacity: enabled ? 1 : 0.3
+                            color: parent.down ? "#999999" : "#5e5e5e"
+                        }
+
+                        onClicked: {
+                            var component;
+                            component = Qt.createComponent("mul.qml");
+                            component.createObject(schemeSpace)
+                            container.addBlock("mul")
+                        }
+                    }
+
+                    // create div block
+                    Button{
+                        text: qsTr("DIV")
+
+                        contentItem: Text {
+                            text: parent.text
+                            font: parent.font
+                            opacity: enabled ? 1.0 : 0.3
+                            color: parent.down ? "black" : "white"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 200
+                            implicitHeight: 40
+                            opacity: enabled ? 1 : 0.3
+                            color: parent.down ? "#999999" : "#5e5e5e"
+                        }
+
+                        onClicked: {
+                            var component;
+                            component = Qt.createComponent("div.qml");
+                            component.createObject(schemeSpace)
+                            container.addBlock("div")
                         }
                     }
                 }

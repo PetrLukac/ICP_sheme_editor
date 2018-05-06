@@ -17,8 +17,7 @@ SOURCES += \
     schemecontainer.cpp \
     schemeprocessor.cpp \
     block.cpp \
-    semantics.cpp \
-    saver.cpp
+    semantics.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,5 +36,4 @@ HEADERS += \
     schemecontainer.h \
     schemeprocessor.h \
     block.h \
-    semantics.h \
-    saver.h
+    semantics.h

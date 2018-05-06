@@ -1,5 +1,5 @@
 /*****
-  * file: dst.qml
+  * file: div.qml
   * author: Peter Lukac xlukac11
   */
 
@@ -10,15 +10,13 @@ import QtGraphicalEffects 1.0
 
 Rectangle{
     id: rec
-    //property int draggedIndex: 0
-    //objectName: "addme"
     property int id_d: 0
     property int type: 0
     property int input1Connected: 0
     property int input2Connected: 0
-    property string opcode: "dst"
-    property int inputCount: 1
-    property string file: "dst.qml"
+    property string opcode: "div"
+    property string file: "div.qml"
+    property int inputCount: 2
 
     width: 220; height: 140
     color:"#e5e5e5"
@@ -99,46 +97,72 @@ Rectangle{
                     component = Qt.createComponent("connection.qml");
                     component.createObject(schemeSpace)
                     container.registerConnection()
+                }
+
+        }
+    }
+    // Input 2
+    Button{
+        id: port_2
+        height: 30
+        width: 60
+        y: 90
+        x: 0
+        contentItem: Text {
+            font.pointSize: 8
+            verticalAlignment: Text.AlignVCenter
+            text: "  Input 1"
+            color: "white"
+        }
+        background: Rectangle {
+            implicitWidth: parent.width
+            implicitHeight: parent.height
+            color: port_2.down ? "#999999" : "#5e5e5e"
+        }
+        onClicked: {
+
+                if( container.addInputConnection(rec.objectName, 2) === 1){
+                    var component;
+                    component = Qt.createComponent("connection.qml");
+                    component.createObject(schemeSpace)
+                    container.registerConnection()
 
                 }
 
         }
     }
-
-    TextField{
-        objectName: "valueField"
-        width: 60
+    // Output
+    Button{
+        id: port_3
         height: 30
-        y: 40
-        x: 120
-        color: "white"
-        text: "[value]"
+        width: 60
+        y: 65
+        x: 160
+        contentItem: Text {
+            font.pointSize: 8
+            verticalAlignment: Text.AlignVCenter
+            text: "Output  "
+            color: "white"
+        }
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height
-            color: parent.down ? "#999999" : "#5e5e5e"
+            color: port_3.down ? "#999999" : "#5e5e5e"
+        }
+        onClicked: {
+            if( container.addOutputConnection(rec.objectName) === 1){
+                var component;
+                component = Qt.createComponent("connection.qml");
+                component.createObject(schemeSpace)
+                container.registerConnection()
+            }
         }
     }
-    TextField{
-        objectName: "typeField"
-        width: 60
-        height: 30
-        y: 90
-        x: 120
-        color: "white"
-        text: "[type]"
-        background: Rectangle {
-            implicitWidth: parent.width
-            implicitHeight: parent.height
-            color: parent.down ? "#999999" : "#5e5e5e"
-        }
-    }
-
     // Operation
     Text{
-        text: "DST"
+        text: "DIV"
         color: "Black"
-        font.pointSize: 16
+        font.pointSize: 20
         x: 80
         y: 65
     }

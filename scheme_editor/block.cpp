@@ -1,3 +1,8 @@
+/*****
+ * file: block.cpp
+ * author: Peter Lukac xlukac11
+ * */
+
 #include "block.h"
 
 Block::Block()
@@ -65,55 +70,6 @@ int Block::getStatus() const{
     return this->status;
 }
 
-std::ostream & operator<<(std::ostream &os, const Block &s)
-{
-    os << s.id_d << '\n';
-    os << s.opcode << '\n';
-    os << s.resultType << '\n';
-    os << s.resultValue << '\n';
-    os << s.status << '\n';
-    os << s.allConnected << '\n';
-    os << s.resultDone << '\n';
-
-    os << "PortVals\n";
-    Saver::printVectorToOut(os,s.portValue);
-    os << "PortValsEnd\n";
-
-    os << "PortTypes\n";
-    Saver::printVectorToOut(os,s.portType);
-    os << "PortTypesEnd\n";
-
-    os << "RecCLK\n";
-    Saver::printVectorToOut(os,s.recivedClk);
-    os << "RecCLKEnd\n";
-
-    os << "OutBIds\n";
-    Saver::printVectorToOut(os,s.outputBlockId);
-    os << "OutBIdsEnd\n";
-
-    os << "PortVals\n";
-    Saver::printVectorToOut(os,s.outputBlockPort);
-    os << "PortValsEnd\n";
-
-    os << "OBlocksIds\n";
-    std::vector<int> outBlockId;
-
-    for(Block *block:s.outputBlock)
-        outBlockId.push_back(block->getId());
-
-    Saver::printVectorToOut(os,outBlockId);
-    os << "OBlocksIdsEnd\n";
-
-    os << "BlockDonesId\n";
-    Saver::printVectorToOut(os,s.blockDone);
-    os << "BlockDonesIdEnd\n";
-
-}
-
-std::istream & operator>>(std::istream &is, Block &s)
-{
-
-}
 
 void Block::interate(int clk){
     if( status == 1 || status == -1 )

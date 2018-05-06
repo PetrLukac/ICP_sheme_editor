@@ -1,3 +1,8 @@
+/*****
+ * file: schemeprocessor.cpp
+ * author: Peter Lukac xlukac11
+ * */
+
 #include "schemeprocessor.h"
 
 SchemeProcessor::SchemeProcessor(QObject* scheme)
@@ -76,25 +81,10 @@ void SchemeProcessor::printSchema(){
 
 void SchemeProcessor::runSchema(){
     for( unsigned clk = 1; clk < blocks.size() + 5; clk++ ){
-        for( int i = 0; i < blocks.size(); i++ ){
+        for( unsigned i = 0; i < blocks.size(); i++ ){
             blocks.at(i)->interate(clk);
         }
     }
 }
 
-void SchemeProcessor::saveBlocks()
-{
-    std::ofstream file;
-    file.open("schema",std::ios::out);
-
-    if(this->blocks.size() != 0)
-    {
-        for(Block * block: this->blocks)
-            file << (*block);
-    }
-    else
-        std::cerr << "Why this is null, ffs" << std::endl;
-
-
-}
 

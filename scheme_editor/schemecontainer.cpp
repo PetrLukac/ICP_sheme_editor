@@ -1,3 +1,8 @@
+/*****
+ * file: schemecontainer.cpp
+ * author: Peter Lukac xlukac11
+ * */
+
 #include "schemecontainer.h"
 
 
@@ -12,11 +17,8 @@ SchemeContainer::SchemeContainer(QObject *parent) : QObject(parent)
 void SchemeContainer::addBlock(QString blockName){
     std::cout << "added block: " << blockName.toStdString() << std::endl;
     std::cout << "we have: " << schemePlane->children().count() << std::endl;
-    //schemePlane->setProperty("color", "red");
-    //this->schemePlane->children().removeAt(0);
     int lastObject = schemePlane->children().count();
     QObject* block = schemePlane->children().at(lastObject-1);
-    //block = block->findChild<QObject*>("addme");
     blockCounter++;
     block->setProperty("id_d", blockCounter);
     block->setProperty("type", 2);
@@ -125,12 +127,7 @@ int SchemeContainer::objectCount(){
 int SchemeContainer::registerConnection(){
     int lastObject = schemePlane->children().count();
     QObject* connection = schemePlane->children().at(lastObject-1);
-    /*connection = connection->findChild<QObject*>("view");
-    connection = connection->findChild<QObject*>("start");
-    QObject* start = connection;
-    connection = connection->findChild<QObject*>("end");
-    QObject* end = connection;
-    //std::cout << "pos " << connection->property("x").toInt() << std::endl;*/
+
     QObject* src = schemePlane->findChild<QObject*>(outputNode);
     QObject* dst = schemePlane->findChild<QObject*>(inputNode);
     std::cout << "pos " << src->property("x").toInt() << " " << src->property("y").toInt() << std::endl;
@@ -147,16 +144,6 @@ int SchemeContainer::registerConnection(){
     connection->setProperty("dst", dst->property("id_d").toInt() );
     connection->setProperty("dstPort", connectionPort );
 
-    /*start->setProperty("startX", src->property("x").toInt() + 210 );
-    start->setProperty("startY", src->property("y").toInt() + 80 );
-    if( connectionPort == 1 ){
-        end->setProperty("x", dst->property("x").toInt() + 10 );
-        end->setProperty("y", dst->property("y").toInt() + 55 );
-    }
-    if( connectionPort == 2 ){
-        end->setProperty("x", dst->property("x").toInt() + 10 );
-        end->setProperty("y", dst->property("y").toInt() + 105 );
-    }*/
 
     return 1;
 }
@@ -193,14 +180,84 @@ void SchemeContainer::schemeStart(){
     proc->connectBlocks();
     proc->printSchema();
     proc->runSchema();
-    proc->saveBlocks();
     delete proc;
 }
 
-void SchemeContainer::delegateSave()
-{
+
+
+void SchemeContainer::saveScheme(QString fileName){
+    std::cout << "saving: " << fileName.toStdString() << std::endl;
+
+    std::fstream file;
+    file.open(fileName.toStdString(), std::fstream::out);
+
+    for(int i = 0; i < schemePlane->children().count(); i++){
+        QObject* o = schemePlane->children().at(i);
+        int type = o->property("type").toInt();
+        std::string oFile = o->property("file").toString().toStdString();
+        if( type == 2 ){
+            std::string opcode = o->property("opcode").toString().toStdString();
+            int id = o->property("id_d").toInt();
+            int x = o->property("x").toInt();
+            int y = o->property("y").toInt();
+
+            file << type << "\t" << id << "\t" << opcode << "\t" << x << "\t" << y << "\t" << oFile << std::endl;
+        }
+        if( type == 1 ){
+            int id = o->property("id_d").toInt();
+            int src = o->property("src").toInt();
+            int dst = o->property("dst").toInt();
+            int dstPort = o->property("dstPort").toInt();
+
+            file << type << "\t" << id << "\t" << src << "\t" << dst << "\t" << dstPort << "\t" << oFile << std::endl;
+        }
+    }
+    file.close();
 }
 
-void SchemeContainer::saveScheme(){
+QString SchemeContainer::loadScheme(QString qName){
+    std::string fileName = qName.toStdString();
 
+    fileName = fileName.substr(7);
+    std::cout << "load: " << fileName << std::endl;
+
+    l_file.open(fileName, std::fstream::in);
+    std::cout << "file open" << std::endl;
+    return "";
 }
+
+int SchemeContainer::loadAvailable(){
+    if( l_file >> l_type >> l_id_d >> l_opcodeOrSrc >> l_xOrDst >> l_yOrDstPort >> l_elementFile ){
+
+        std::cout << "loaded " << l_type << " " << l_id_d << " " <<
+                     l_opcodeOrSrc << " " << l_xOrDst << " " <<
+                     l_yOrDstPort << " " << l_elementFile << std::endl;
+
+        return 1;
+    }
+
+    l_file.close();
+    return 0;
+}
+
+QString SchemeContainer::getElement(){
+    return QString::fromStdString(l_elementFile);
+}
+
+void SchemeContainer::registerElement(){
+    int lastObject = schemePlane->children().count();
+    QObject* o = schemePlane->children().at(lastObject-1);
+    o->setProperty("type", l_type);
+    o->setProperty("id_d", l_id_d);
+    if( l_type == 2 ){
+        o->setProperty("x", l_xOrDst);
+        o->setProperty("y", l_yOrDstPort);
+    }
+    if( l_type == 1 ){
+        o->setProperty("src", std::stoi(l_opcodeOrSrc) );
+        o->setProperty("dst", l_xOrDst );
+        o->setProperty("dstPort", l_yOrDstPort);
+    }
+}
+
+

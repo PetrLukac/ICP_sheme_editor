@@ -1,3 +1,8 @@
+/*****
+  * file: add.qml
+  * author: Peter Lukac xlukac11
+  */
+
 import QtQuick 2.0
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.2
@@ -5,13 +10,12 @@ import QtGraphicalEffects 1.0
 
 Rectangle{
     id: rec
-    //property int draggedIndex: 0
-    //objectName: "addme"
     property int id_d: 0
     property int type: 0
     property int input1Connected: 0
     property int input2Connected: 0
     property string opcode: "add"
+    property string file: "add.qml"
     property int inputCount: 2
 
     width: 220; height: 140

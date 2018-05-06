@@ -7,5 +7,8 @@
         <file>dst.qml</file>
         <file>dialog.qml</file>
         <file>saveWindow.qml</file>
+        <file>sub.qml</file>
+        <file>div.qml</file>
+        <file>mul.qml</file>
     </qresource>
 </RCC>

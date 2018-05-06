@@ -1,3 +1,8 @@
+/*****
+  * file: connection.qml
+  * author: Peter Lukac xlukac11
+  */
+
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 
@@ -7,6 +12,7 @@ Item{
     property int src: 0
     property int dst: 0
     property int dstPort: 0
+    property string file: "connection.qml"
     id: r
     PathView {
         objectName: "view"
