@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.2
 
 Window {
-    //id: root
+    id: root
     objectName: "o_root"
     visible: true
     width: 1024
@@ -34,12 +34,19 @@ Window {
                 Button{
                     text: qsTr("Save")
                     onClicked: {
-                        container.delegateSave();
+                        var component = Qt.createComponent("saveWindow.qml");
+                        var win = component.createObject(root);
+                        win.show();
                     }
                 }
                 Button{
                     id: loadButton
                     text: qsTr("Load")
+                    onClicked: {
+                        var component = Qt.createComponent("dialog.qml");
+                        var win = component.createObject(root);
+                        win.show();
+                    }
                 }
 
                 Rectangle{

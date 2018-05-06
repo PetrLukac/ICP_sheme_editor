@@ -10,6 +10,10 @@
 #include <QQmlApplicationEngine>
 #include <QRect>
 #include <QList>
+#include <QFile>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QFileDialog>
 
 #include "schemeprocessor.h"
 
@@ -53,6 +57,8 @@ public:
     Q_INVOKABLE void schemeStart();
 
     Q_INVOKABLE void delegateSave();
+
+    Q_INVOKABLE void saveScheme();
 
 signals:
 

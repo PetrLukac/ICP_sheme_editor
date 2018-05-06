@@ -4,6 +4,8 @@
 #include <QQmlContext>
 #include "schemecontainer.h"
 #include <iostream>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QFileDialog>
 
 int main(int argc, char *argv[])
 {

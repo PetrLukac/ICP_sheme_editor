@@ -200,3 +200,7 @@ void SchemeContainer::schemeStart(){
 void SchemeContainer::delegateSave()
 {
 }
+
+void SchemeContainer::saveScheme(){
+
+}
