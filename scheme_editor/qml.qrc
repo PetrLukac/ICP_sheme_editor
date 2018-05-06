@@ -5,5 +5,7 @@
         <file>connection.qml</file>
         <file>src.qml</file>
         <file>dst.qml</file>
+        <file>dialog.qml</file>
+        <file>saveWindow.qml</file>
     </qresource>
 </RCC>
