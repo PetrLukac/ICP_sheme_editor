@@ -369,3 +369,7 @@ double SchemeContainer::getBlockValue(int blockId){
 QString SchemeContainer::getBlockType(int blockId){
     return QString::fromStdString( SchemeProcessor::getInstance().getBlockType(blockId) );
 }
+
+int SchemeContainer::checkLoops(){
+    return SchemeProcessor::getInstance().checkLoops();
+}

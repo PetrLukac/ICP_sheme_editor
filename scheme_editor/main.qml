@@ -77,7 +77,8 @@ Window {
                     onClicked: {
                         container.schemeEdit()
                         var isBuilt = container.schemeBuild()
-                        if( isBuilt === 1){
+                        var noLoops = container.checkLoops()
+                        if( isBuilt === 1 && noLoops === 1){
                             runButton.enabled = true
                             stepButton.enabled = true
                         }

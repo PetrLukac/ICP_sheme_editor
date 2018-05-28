@@ -115,6 +115,8 @@ public:
 
     std::string getType();
 
+    int checkForLoops(std::vector<int>* blockList );
+
 };
 
 #endif // BLOCK_H

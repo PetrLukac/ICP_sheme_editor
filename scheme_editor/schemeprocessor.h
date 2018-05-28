@@ -85,6 +85,8 @@ public:
 
     std::string getBlockType(int blockId);
 
+    int checkLoops();
+
 };
 
 #endif // SCHEMEPROCESSOR_H

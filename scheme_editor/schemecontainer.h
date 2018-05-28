@@ -170,6 +170,8 @@ public:
 
     Q_INVOKABLE QString getBlockType(int blockId);
 
+    Q_INVOKABLE int checkLoops();
+
 signals:
 
 public slots:

@@ -155,3 +155,14 @@ std::string SchemeProcessor::getBlockType(int blockId){
     return "";
 }
 
+int SchemeProcessor::checkLoops(){
+    int retVal = 1;
+    for( unsigned i = 0; i < blocks.size(); i++ ){
+        std::vector<int>* v = new std::vector<int>();
+        if( blocks.at(i)->checkForLoops(v) == 0 )
+            retVal = 0;
+        delete v;
+    }
+    return retVal;
+}
+

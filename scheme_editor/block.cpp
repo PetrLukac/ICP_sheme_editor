@@ -132,3 +132,23 @@ void Block::reciveData(double value, std::string type, int port, int clk){
         }
     }
 }
+
+
+int Block::checkForLoops(std::vector<int>* blockList ){
+    for( unsigned i = 0; i < blockList->size(); i++ ){
+        if( blockList->at(i) == this->id_d ){
+            QObject* o = qmlBlock->findChild<QObject*>("top");
+            if( o != nullptr )
+                o->setProperty("color","#f72a34");
+            return 0;
+        }
+    }
+    blockList->push_back(this->id_d);
+    int retVal = 1;
+    for( unsigned i = 0; i < outputBlock.size(); i++ ){
+        if( outputBlock.at(i)->checkForLoops(blockList) == 0)
+            retVal = 0;
+    }
+    blockList->pop_back();
+    return retVal;
+}
