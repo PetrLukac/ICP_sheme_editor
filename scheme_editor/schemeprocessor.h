@@ -23,13 +23,26 @@ private:
     QList<QObject*> connectionList;
     std::vector<Block*> blocks;
 
+    SchemeProcessor() {}
+    SchemeProcessor(SchemeProcessor const &);
+    void operator =(SchemeProcessor const&);
+
+    int blockClk;
+
 public:
 
-    /********
-     * SchemeProcessor simple constructor
-     * @param cheme pointer to the main plane with scheme
+    /***********************
+     * getInstance returns singleton instance
      * */
-    SchemeProcessor(QObject* scheme);
+    static SchemeProcessor& getInstance(){
+        static SchemeProcessor instance;
+        return instance;
+    }
+
+    /***********************
+     * passSchemeElement allows to pass pointer to the scheme plane
+     * */
+    void passSchemeElement(QObject* scheme);
 
     /****************
      * loadBlocks loads blocks from the cheme int private array
@@ -55,6 +68,22 @@ public:
      * runSchema performs computation
      * */
     void runSchema();
+
+    /****************
+     * clearBlocks clears backend information
+     * */
+    void clearBlocks();
+
+    /***************
+     * stepSchema step
+     * */
+    int stepSchema();
+
+    int getBlockStatus(int blockId);
+
+    double getBlockValue(int blockId);
+
+    std::string getBlockType(int blockId);
 
 };
 

@@ -12,7 +12,7 @@
 #include <iostream>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFileDialog>
-
+#include "schemeprocessor.h"
 
 /*******
  * main function provides creation of window
@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
     QObject* row = column->findChild<QObject*>("o_root_row");
     QObject* scheme = row->findChild<QObject*>("o_schemeSpace");
     container.data()->passTheSchemePtr(scheme);
+
+    SchemeProcessor::getInstance().passSchemeElement(scheme);
 
     return app.exec();
 

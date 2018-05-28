@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <QString>
+#include <vector>
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -23,6 +24,7 @@
 
 #include "schemeprocessor.h"
 #include <unistd.h>
+#include <QMetaObject>
 
 /**********
  * SchemeContainer provides backed funtions
@@ -115,10 +117,10 @@ public:
     Q_INVOKABLE int deleteConnections(int id);
 
     /************
-     * schemeStart begins computation of the scheme
+     * schemeBuild begins computation of the scheme
      * all blocks gets connected, connections are checkd
      * */
-    Q_INVOKABLE void schemeStart();
+    Q_INVOKABLE int schemeBuild();
 
     /*************
      * saveScheme collects attributes of all elements int the cheme and saved them in the folder
@@ -146,6 +148,27 @@ public:
      * registerElement supports functionality to the loadCheme
      * */
     Q_INVOKABLE void registerElement();
+
+    /**************
+     * schemeEdit sets blocks to default mode
+     * */
+    Q_INVOKABLE int schemeEdit();
+
+    /**************
+     * schemeRun runs scheme
+     * */
+    Q_INVOKABLE int schemeRun();
+
+    /**************
+     * schemeIterate performs one iteration on all blocks
+     * */
+    Q_INVOKABLE int schemeIterate();
+
+    Q_INVOKABLE int getBlockStatus(int blockId);
+
+    Q_INVOKABLE double getBlockValue(int blockId);
+
+    Q_INVOKABLE QString getBlockType(int blockId);
 
 signals:
 

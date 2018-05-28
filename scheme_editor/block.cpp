@@ -14,6 +14,14 @@ int Block::getId() const{
     return this->id_d;
 }
 
+double Block::getValue(){
+    return this->resultValue;
+}
+
+std::string Block::getType(){
+    return this->resultType;
+}
+
 void Block::addOutputBlocks(std::vector<Block*> blocks){
     for( unsigned i = 0; i < outputBlockId.size(); i++ ){
         int id = outputBlockId.at(i);
@@ -89,11 +97,16 @@ void Block::interate(int clk){
     for( unsigned i = 0; i < outputBlockId.size(); i++ ){
         outputBlock.at(i)->reciveData( resultValue, resultType, outputBlockPort.at(i), clk );
     }
-
+    QObject* o = qmlBlock->findChild<QObject*>("top");
+    if( o != nullptr )
+        o->setProperty("color","#3edd16");
 }
 
 void Block::reciveData(double value, std::string type, int port, int clk){
     std::cout << "id_d: " << id_d << " reciving data" << std::endl;
+    QObject* o = qmlBlock->findChild<QObject*>("top");
+    if( o != nullptr )
+        o->setProperty("color","#ff7830");
     portValue.at(port-1) = value;
     portType.at(port-1) = type;
     recivedClk.at(port-1) = clk;

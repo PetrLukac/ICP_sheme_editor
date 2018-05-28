@@ -9,6 +9,8 @@
 void moveConnectionStart(QObject* connection, int x, int y);
 void moveConnectionEnd(QObject* connection, int x, int y, int portNumer);
 
+std::vector<std::string> parseLine(const std::string &line, const std::string &separator);
+
 SchemeContainer::SchemeContainer(QObject *parent) : QObject(parent)
 {
 
@@ -172,15 +174,32 @@ void moveConnectionEnd(QObject* connection, int x, int y, int portNumer){
 
 
 
-void SchemeContainer::schemeStart(){
-    std::cout << "scheme started" << std::endl;
-    proc = new SchemeProcessor(schemePlane);
+int SchemeContainer::schemeBuild(){
+    std::cout << "scheme build:" << std::endl;
+    SchemeProcessor::getInstance().loadBlocks();
+    SchemeProcessor::getInstance().loadConnections();
+    return SchemeProcessor::getInstance().connectBlocks();
+    /*proc = new SchemeProcessor(schemePlane);
     proc->loadBlocks();
     proc->loadConnections();
     proc->connectBlocks();
     proc->printSchema();
     proc->runSchema();
-    delete proc;
+    delete proc;*/
+}
+
+int SchemeContainer::schemeRun(){
+    SchemeProcessor::getInstance().runSchema();
+    return 1;
+}
+
+int SchemeContainer::schemeEdit(){
+    SchemeProcessor::getInstance().clearBlocks();
+    return 1;
+}
+
+int SchemeContainer::schemeIterate(){
+    return SchemeProcessor::getInstance().stepSchema();
 }
 
 
@@ -221,8 +240,69 @@ QString SchemeContainer::loadScheme(QString qName){
     fileName = fileName.substr(7);
     std::cout << "load: " << fileName << std::endl;
 
-    l_file.open(fileName, std::fstream::in);
+    std::ifstream file;
+    file.open(fileName, std::fstream::in);
     std::cout << "file open" << std::endl;
+
+    std::vector< std::vector<std::string> > connectionsVector;
+    std::vector<QObject*> blocks;
+
+    int blockCounter = 1;
+    std::string line;
+    while( !file.eof() ){
+        line.clear();
+        std::getline(file,line);
+        std::cout << line << std::endl;
+        std::vector<std::string> data = parseLine(line, "\t");
+        if( data.size() == 6 ){
+            if( data.at(0) == "2" ){
+                QVariant qmlReturnVal;
+                QMetaObject::invokeMethod( schemePlane, "addElement", Q_RETURN_ARG(QVariant, qmlReturnVal), Q_ARG(QVariant, QString::fromStdString( data.at(5) ) ));
+                QObject* newBlock = schemePlane->children().at( schemePlane->children().size() - 1 );
+                blocks.push_back(newBlock);
+                if( newBlock != nullptr ){
+                    newBlock->setProperty("type", std::stoi(data.at(0)) );
+                    newBlock->setProperty("id_d", std::stoi(data.at(1)) );
+                    newBlock->setProperty("x", std::stoi(data.at(3)) );
+                    newBlock->setProperty("y", std::stoi(data.at(4)) );
+                    newBlock->setObjectName( "Block_"+QString::number(blockCounter) );
+                    blockCounter++;
+                }
+            }
+            if( data.at(0) == "1" ){
+                connectionsVector.push_back(data);
+            }
+        }
+    }
+
+    int maxConnId = 0;
+    for( unsigned i = 0; i < connectionsVector.size(); i++ ){
+        QVariant qmlReturnVal;
+        QMetaObject::invokeMethod( schemePlane, "addElement", Q_RETURN_ARG(QVariant, qmlReturnVal), Q_ARG(QVariant, "connection.qml" ));
+        QObject* newC = schemePlane->children().at( schemePlane->children().size() - 1 );
+        newC->setProperty("type", std::stoi(connectionsVector.at(i).at(0)) );
+        newC->setProperty("id_d", std::stoi(connectionsVector.at(i).at(1)) );
+        newC->setProperty("src", std::stoi(connectionsVector.at(i).at(2)) );
+        newC->setProperty("dst", std::stoi(connectionsVector.at(i).at(3)) );
+        newC->setProperty("dstPort", std::stoi(connectionsVector.at(i).at(4)) );
+        QObject* src;
+        QObject* dst;
+        for( unsigned j = 0; j < blocks.size(); j++ ){
+            if( blocks.at(j)->property("id_d").toInt() == newC->property("src").toInt() )
+                src = blocks.at(j);
+            if( blocks.at(j)->property("id_d").toInt() == newC->property("dst").toInt() )
+                dst = blocks.at(j);
+        }
+        moveConnectionStart(newC, src->property("x").toInt(), src->property("y").toInt());
+        moveConnectionEnd(newC, dst->property("x").toInt(), dst->property("y").toInt(), newC->property("dstPort").toInt() );
+
+        if( std::stoi(connectionsVector.at(i).at(1)) >= maxConnId )
+            maxConnId = std::stoi(connectionsVector.at(i).at(1)) + 1;
+    }
+
+    this->blockCounter = blockCounter;
+    this->connectionCounter = maxConnId;
+
     return "";
 }
 
@@ -261,3 +341,31 @@ void SchemeContainer::registerElement(){
 }
 
 
+std::vector<std::string> parseLine(const std::string &line, const std::string &separator){
+    std::vector<std::string> result;
+    std::string bufferString = line;
+    std::string substring;
+    while(true){
+        std::size_t index = bufferString.find(separator);
+        if( index == std::string::npos ){
+            result.push_back(bufferString);
+            break;
+        }
+        substring = bufferString.substr(0,index);
+        result.push_back(substring);
+        bufferString = bufferString.substr(index+1);
+    }
+    return result;
+}
+
+int SchemeContainer::getBlockStatus(int blockId){
+    return SchemeProcessor::getInstance().getBlockStatus(blockId);
+}
+
+double SchemeContainer::getBlockValue(int blockId){
+    return SchemeProcessor::getInstance().getBlockValue(blockId);
+}
+
+QString SchemeContainer::getBlockType(int blockId){
+    return QString::fromStdString( SchemeProcessor::getInstance().getBlockType(blockId) );
+}

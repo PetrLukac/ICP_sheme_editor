@@ -8,7 +8,7 @@
 
 
 
-int Semantics::computeData( const std::vector<double> &value,
+double Semantics::computeData( const std::vector<double> &value,
                  const std::vector<std::string> &type,
                             const std::string &opcode){
     std::string mainType = type.at(0);
@@ -37,7 +37,7 @@ int Semantics::computeData( const std::vector<double> &value,
         for( unsigned i = 1; i < value.size(); i++)
             returnValue /= value.at(i);
     }
-
+    std::cout << "value: " << returnValue << std::endl;
 
     return returnValue;
 }

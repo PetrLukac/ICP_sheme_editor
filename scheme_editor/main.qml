@@ -2,6 +2,8 @@
   * file: main.qml
   * author: Peter Lukac xlukac11
   */
+
+
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.2
@@ -49,25 +51,6 @@ Window {
                     onClicked: {
                         var component = Qt.createComponent("dialog.qml");
                         var win = component.createObject(root);
-                        win.show();
-
-                    }
-                }
-                Button{
-                    text: "Load loaded"
-                    onClicked: {
-                        container.loadAvailable()
-                    }
-                }
-                Button{
-                    text: "Fetch"
-                    onClicked: {
-                        var el = container.getElement()
-                        console.log("loading " + el)
-                        var component;
-                        component = Qt.createComponent(el);
-                        component.createObject(schemeSpace)
-                        container.registerElement()
                     }
                 }
 
@@ -75,16 +58,56 @@ Window {
                     width: 50
                 }
                 Button{
-                    text: "Run"
+                    id: editButton
+                    text: "Edit"
+                    enabled: false
                     onClicked: {
-                        container.schemeStart()
+                        editButton.enabled = false
+                        buildButton.enabled = true
+                        buildButton.text = "Build"
+                        runButton.enabled = false
+                        stepButton.enabled = false
+                        container.schemeEdit()
                     }
                 }
                 Button{
-                    text: "Step"
+                    id: buildButton
+                    text: "Build"
+                    enabled: true
+                    onClicked: {
+                        container.schemeEdit()
+                        var isBuilt = container.schemeBuild()
+                        if( isBuilt === 1){
+                            runButton.enabled = true
+                            stepButton.enabled = true
+                        }
+                        buildButton.enabled = false
+                        editButton.enabled = true
+                    }
                 }
                 Button{
-                    text: "Restart"
+                    id: runButton
+                    text: "Run"
+                    enabled: false
+                    onClicked: {
+                        buildButton.text = "Rebuild"
+                        runButton.enabled = false
+                        stepButton.enabled = false
+                        buildButton.enabled = true
+                        container.schemeRun()
+                    }
+                }
+                Button{
+                    id: stepButton
+                    text: "Step"
+                    enabled: false
+                    onClicked: {
+                        buildButton.text = "Rebuild"
+                        runButton.enabled = false
+                        buildButton.enabled = true
+                        if( container.schemeIterate() === 1)
+                            stepButton.enabled = false
+                    }
                 }
 
             }
@@ -285,6 +308,13 @@ Window {
                 width: maximumWidth
                 height: maximumHeight
                 color: "#f9f9f9"
+                function addElement(file){
+                    console.log("adding element:", file)
+                    var component;
+                    component = Qt.createComponent(file);
+                    component.createObject(schemeSpace)
+                    return 1
+                }
             }
         }
     }

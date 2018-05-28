@@ -23,7 +23,7 @@ public:
      * @param type array of types
      * @param opcode oparation
      * */
-    int computeData( const std::vector<double> &value,
+    double computeData( const std::vector<double> &value,
                      const std::vector<std::string> &type,
                      const std::string &opcode);
 

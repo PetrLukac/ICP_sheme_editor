@@ -5,8 +5,7 @@
 
 #include "schemeprocessor.h"
 
-SchemeProcessor::SchemeProcessor(QObject* scheme)
-{
+void SchemeProcessor::passSchemeElement(QObject* scheme){
     this->scheme = scheme;
 }
 
@@ -36,6 +35,7 @@ int SchemeProcessor::loadConnections(){
 
 
 int SchemeProcessor::connectBlocks(){
+    int retval = 1;
     for( int i = 0; i < blockList.length(); i++ ){
         QObject* o = blockList.at(i);
         int inputCount = o->property("inputCount").toInt();
@@ -49,11 +49,21 @@ int SchemeProcessor::connectBlocks(){
         }
 
         std::cout << "id: " << id << " inputCount: " << inputCount << " connected connections: " << ports.size() << std::endl;
+        QObject* top = o->findChild<QObject*>("top");
+        if( top == nullptr ){
+            std::cout << "no top !" << std::endl;
+        }
+        if( (unsigned)inputCount == ports.size() )
+            top->setProperty("color","#9e58f4");
+        else{
+            top->setProperty("color","#f72a34");
+            retval = 0;
+        }
         Block* b = new Block();
         b->setId(id);
         b->bindQmlBlock(o);
         b->validateInputConnected( (unsigned)inputCount == ports.size() );
-        std::vector<int> connectedBlocks;
+        //std::vector<int> connectedBlocks;
 
         for( int j = 0; j < connectionList.length(); j++ ){
             QObject* c = connectionList.at(j);
@@ -70,7 +80,8 @@ int SchemeProcessor::connectBlocks(){
         b->addOutputBlocks( blocks );
     }
 
-    return 1;
+    blockClk = 1;
+    return retval;
 }
 
 void SchemeProcessor::printSchema(){
@@ -85,6 +96,62 @@ void SchemeProcessor::runSchema(){
             blocks.at(i)->interate(clk);
         }
     }
+    for( unsigned i = 0; i < blocks.size(); i++ ){
+        std::cout << blocks.at(i)->getStatus() << " ";
+    }
+    std::cout << std::endl;
 }
 
+int SchemeProcessor::stepSchema(){
+    int retVal = 1;
+    for( unsigned i = 0; i < blocks.size(); i++ ){
+        blocks.at(i)->interate(blockClk);
+    }
+    blockClk++;
+    for( unsigned i = 0; i < blocks.size(); i++ ){
+        if( blocks.at(i)->getStatus() != 1 )
+            retVal = 0;
+    }
+    return retVal;
+}
+
+void SchemeProcessor::clearBlocks(){
+    for( int i = 0; i < blockList.size(); i++){
+        QObject* o;
+        o = blockList.at(i)->findChild<QObject*>("top");
+        o->setProperty("color", "#16cee2");
+    }
+
+    blockList.clear();
+    connectionList.clear();
+
+    for( unsigned i = 0; i < blocks.size(); i++){
+        delete blocks[i];
+    }
+    blocks.clear();
+}
+
+int SchemeProcessor::getBlockStatus(int blockId){
+    for( unsigned i = 0; i < blocks.size(); i++){
+        if( blocks.at(i)->getId() == blockId && blocks.at(i)->getStatus() == 1 )
+            return 1;
+    }
+    return 0;
+}
+
+double SchemeProcessor::getBlockValue(int blockId){
+    for( unsigned i = 0; i < blocks.size(); i++){
+        if( blocks.at(i)->getId() == blockId )
+            return blocks.at(i)->getValue();
+    }
+    return 0;
+}
+
+std::string SchemeProcessor::getBlockType(int blockId){
+    for( unsigned i = 0; i < blocks.size(); i++){
+        if( blocks.at(i)->getId() == blockId )
+            return blocks.at(i)->getType();
+    }
+    return "";
+}
 

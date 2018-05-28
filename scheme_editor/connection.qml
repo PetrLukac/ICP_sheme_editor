@@ -14,6 +14,15 @@ Item{
     property int dstPort: 0
     property string file: "connection.qml"
     id: r
+
+    ToolTip {
+            id: connectionTooltip
+            parent: parent
+            visible: false
+            text: "value\ntype"
+
+    }
+
     PathView {
         objectName: "view"
         model: 300;
@@ -22,6 +31,24 @@ Item{
             width: 4; height: 4;
             color: "black";
             radius: width/2
+
+            MouseArea
+            {
+                  anchors.fill: parent
+                  hoverEnabled: true
+                  onHoveredChanged: {
+                      if( container.getBlockStatus(r.src) === 1){
+                          connectionTooltip.text = container.getBlockValue(r.src)
+                          connectionTooltip.text += "\n" + container.getBlockType(r.src)
+                          connectionTooltip.visible = true
+                          connectionTooltip.x = parent.x - 20
+                          connectionTooltip.y = parent.y - 50
+                      }
+                  }
+                  onExited: {
+                      connectionTooltip.visible = false
+                  }
+            }
         }
         Path {
               objectName: "start"

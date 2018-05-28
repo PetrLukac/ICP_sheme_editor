@@ -111,6 +111,10 @@ public:
      * */
     int getStatus() const;
 
+    double getValue();
+
+    std::string getType();
+
 };
 
 #endif // BLOCK_H
