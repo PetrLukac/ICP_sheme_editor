@@ -48,8 +48,10 @@ Rectangle{
                 Button{
                     //text: "X"
                     onClicked:{
-                        container.deleteConnections(rec.id_d)
-                        rec.destroy();
+                        if( container.getEdit() === 1 ){
+                            container.deleteConnections(rec.id_d)
+                            rec.destroy();
+                        }
                     }
                     x: 190
                     width: 30

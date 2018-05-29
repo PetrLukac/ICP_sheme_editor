@@ -82,7 +82,8 @@ Item{
             color: parent.hovered ? "#ef1726" : "#6d6d6d"
         }
         onClicked: {
-            r.destroy()
+            if( container.getEdit() === 1)
+                r.destroy()
         }
     }
 }

@@ -16,7 +16,6 @@ FileDialog {
     title: "Please choose a file"
     folder: shortcuts.home
     sidebarVisible: true
-    selectExisting: false
     onAccepted: {
 
         console.log("You chose: " + fileDialog.fileUrl)

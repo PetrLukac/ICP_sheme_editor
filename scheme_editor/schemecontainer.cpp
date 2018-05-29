@@ -75,6 +75,9 @@ int SchemeContainer::deleteConnections(int id){
 
 
 int SchemeContainer::addInputConnection(QString block, int port){
+    if( editable == 0 )
+        return 0;
+
     QObject* node =  schemePlane->findChild<QObject*>(block);
     int id = node->property("id_d").toInt();
     for(int i = 0; i < schemePlane->children().count(); i++){
@@ -104,6 +107,9 @@ int SchemeContainer::addInputConnection(QString block, int port){
 }
 
 int SchemeContainer::addOutputConnection(QString block){
+    if( editable == 0 )
+        return 0;
+
     if( draggingInput == 0 ){
         std::cout << "dragging output from: " << block.toStdString() << std::endl;
         draggingOutput = 1;
@@ -242,6 +248,10 @@ QString SchemeContainer::loadScheme(QString qName){
 
     std::ifstream file;
     file.open(fileName, std::fstream::in);
+    if( !file.is_open() )
+        return "";
+
+    clearScheme();
     std::cout << "file open" << std::endl;
 
     std::vector< std::vector<std::string> > connectionsVector;
@@ -285,16 +295,18 @@ QString SchemeContainer::loadScheme(QString qName){
         newC->setProperty("src", std::stoi(connectionsVector.at(i).at(2)) );
         newC->setProperty("dst", std::stoi(connectionsVector.at(i).at(3)) );
         newC->setProperty("dstPort", std::stoi(connectionsVector.at(i).at(4)) );
-        QObject* src;
-        QObject* dst;
+        QObject* src = nullptr;
+        QObject* dst = nullptr;
         for( unsigned j = 0; j < blocks.size(); j++ ){
             if( blocks.at(j)->property("id_d").toInt() == newC->property("src").toInt() )
                 src = blocks.at(j);
             if( blocks.at(j)->property("id_d").toInt() == newC->property("dst").toInt() )
                 dst = blocks.at(j);
         }
-        moveConnectionStart(newC, src->property("x").toInt(), src->property("y").toInt());
-        moveConnectionEnd(newC, dst->property("x").toInt(), dst->property("y").toInt(), newC->property("dstPort").toInt() );
+        if( src != nullptr)
+            moveConnectionStart(newC, src->property("x").toInt(), src->property("y").toInt());
+        if( dst != nullptr)
+            moveConnectionEnd(newC, dst->property("x").toInt(), dst->property("y").toInt(), newC->property("dstPort").toInt() );
 
         if( std::stoi(connectionsVector.at(i).at(1)) >= maxConnId )
             maxConnId = std::stoi(connectionsVector.at(i).at(1)) + 1;
@@ -305,41 +317,6 @@ QString SchemeContainer::loadScheme(QString qName){
 
     return "";
 }
-
-int SchemeContainer::loadAvailable(){
-    if( l_file >> l_type >> l_id_d >> l_opcodeOrSrc >> l_xOrDst >> l_yOrDstPort >> l_elementFile ){
-
-        std::cout << "loaded " << l_type << " " << l_id_d << " " <<
-                     l_opcodeOrSrc << " " << l_xOrDst << " " <<
-                     l_yOrDstPort << " " << l_elementFile << std::endl;
-
-        return 1;
-    }
-
-    l_file.close();
-    return 0;
-}
-
-QString SchemeContainer::getElement(){
-    return QString::fromStdString(l_elementFile);
-}
-
-void SchemeContainer::registerElement(){
-    int lastObject = schemePlane->children().count();
-    QObject* o = schemePlane->children().at(lastObject-1);
-    o->setProperty("type", l_type);
-    o->setProperty("id_d", l_id_d);
-    if( l_type == 2 ){
-        o->setProperty("x", l_xOrDst);
-        o->setProperty("y", l_yOrDstPort);
-    }
-    if( l_type == 1 ){
-        o->setProperty("src", std::stoi(l_opcodeOrSrc) );
-        o->setProperty("dst", l_xOrDst );
-        o->setProperty("dstPort", l_yOrDstPort);
-    }
-}
-
 
 std::vector<std::string> parseLine(const std::string &line, const std::string &separator){
     std::vector<std::string> result;
@@ -372,4 +349,19 @@ QString SchemeContainer::getBlockType(int blockId){
 
 int SchemeContainer::checkLoops(){
     return SchemeProcessor::getInstance().checkLoops();
+}
+
+
+void SchemeContainer::clearScheme(){
+    for( int i = schemePlane->children().size() - 1 ; i > 0; i-- ){
+        schemePlane->children().at(i)->~QObject();
+    }
+}
+
+void SchemeContainer::setEdit(int e){
+    this->editable = e;
+}
+
+int SchemeContainer::getEdit(){
+    return this->editable;
 }

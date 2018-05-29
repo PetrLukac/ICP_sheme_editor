@@ -75,16 +75,35 @@ public:
     void clearBlocks();
 
     /***************
-     * stepSchema step
+     * stepSchema step interates each block once
      * */
     int stepSchema();
 
+    /*************
+     * getBlockStatus returns status of the block based on id
+     * @param blockId id of the block
+     * @return 1 if block has finished computation
+     * */
     int getBlockStatus(int blockId);
 
+    /**************
+     * getBlockValue returns computed value of the block based on id
+     * @param blockId id of the block
+     * @return computed block value
+     * */
     double getBlockValue(int blockId);
 
+    /**************
+     * getBlockValue returns computed type of the block based on id
+     * @param blockId id of the block
+     * @return computed block type
+     * */
     std::string getBlockType(int blockId);
 
+    /*******************
+     * checkLoops calls check for loop on all blocks
+     * @return 1 if all bocks returned 1, no loop are present in the schema
+     * */
     int checkLoops();
 
 };

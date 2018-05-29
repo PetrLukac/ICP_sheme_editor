@@ -1,5 +1,5 @@
 /*****
-  * file: div.qml
+  * file: sum.qml
   * author: Peter Lukac xlukac11
   */
 
@@ -14,11 +14,11 @@ Rectangle{
     property int type: 0
     property int input1Connected: 0
     property int input2Connected: 0
-    property string opcode: "div"
-    property string file: "div.qml"
-    property int inputCount: 2
+    property string opcode: "add"
+    property string file: "sum.qml"
+    property int inputCount: 3
 
-    width: 220; height: 140
+    width: 220; height: 190
     color:"#e5e5e5"
     x: 10
     y: 10
@@ -113,7 +113,7 @@ Rectangle{
         contentItem: Text {
             font.pointSize: 8
             verticalAlignment: Text.AlignVCenter
-            text: "  Input 1"
+            text: "  Input 2"
             color: "white"
         }
         background: Rectangle {
@@ -133,9 +133,39 @@ Rectangle{
 
         }
     }
-    // Output
+    // Input 3
     Button{
         id: port_3
+        height: 30
+        width: 60
+        y: 140
+        x: 0
+        contentItem: Text {
+            font.pointSize: 8
+            verticalAlignment: Text.AlignVCenter
+            text: "  Input 3"
+            color: "white"
+        }
+        background: Rectangle {
+            implicitWidth: parent.width
+            implicitHeight: parent.height
+            color: port_3.down ? "#999999" : "#5e5e5e"
+        }
+        onClicked: {
+
+                if( container.addInputConnection(rec.objectName, 3) === 1){
+                    var component;
+                    component = Qt.createComponent("connection.qml");
+                    component.createObject(schemeSpace)
+                    container.registerConnection()
+
+                }
+
+        }
+    }
+    // Output
+    Button{
+        id: port_4
         height: 30
         width: 60
         y: 65
@@ -149,7 +179,7 @@ Rectangle{
         background: Rectangle {
             implicitWidth: parent.width
             implicitHeight: parent.height
-            color: port_3.down ? "#999999" : "#5e5e5e"
+            color: port_4.down ? "#999999" : "#5e5e5e"
         }
         onClicked: {
             if( container.addOutputConnection(rec.objectName) === 1){
@@ -162,7 +192,7 @@ Rectangle{
     }
     // Operation
     Text{
-        text: "DIV"
+        text: "SUM"
         color: "Black"
         font.pointSize: 20
         x: 80

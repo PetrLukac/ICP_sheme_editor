@@ -10,5 +10,6 @@
         <file>sub.qml</file>
         <file>div.qml</file>
         <file>mul.qml</file>
+        <file>sum.qml</file>
     </qresource>
 </RCC>

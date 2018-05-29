@@ -36,6 +36,9 @@ Window {
                 spacing: 10
                 Button{
                     text: qsTr("New")
+                    onClicked: {
+                        container.clearScheme();
+                    }
                 }
                 Button{
                     text: qsTr("Save")
@@ -68,6 +71,7 @@ Window {
                         runButton.enabled = false
                         stepButton.enabled = false
                         container.schemeEdit()
+                        container.setEdit(1)
                     }
                 }
                 Button{
@@ -76,6 +80,7 @@ Window {
                     enabled: true
                     onClicked: {
                         container.schemeEdit()
+                        container.setEdit(0)
                         var isBuilt = container.schemeBuild()
                         var noLoops = container.checkLoops()
                         if( isBuilt === 1 && noLoops === 1){
@@ -296,6 +301,34 @@ Window {
                         onClicked: {
                             var component;
                             component = Qt.createComponent("div.qml");
+                            component.createObject(schemeSpace)
+                            container.addBlock("div")
+                        }
+                    }
+                    // create SUM block
+                    Button{
+                        text: qsTr("SUM")
+
+                        contentItem: Text {
+                            text: parent.text
+                            font: parent.font
+                            opacity: enabled ? 1.0 : 0.3
+                            color: parent.down ? "black" : "white"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 200
+                            implicitHeight: 40
+                            opacity: enabled ? 1 : 0.3
+                            color: parent.down ? "#999999" : "#5e5e5e"
+                        }
+
+                        onClicked: {
+                            var component;
+                            component = Qt.createComponent("sum.qml");
                             component.createObject(schemeSpace)
                             container.addBlock("div")
                         }

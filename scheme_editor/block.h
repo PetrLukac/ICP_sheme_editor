@@ -102,19 +102,34 @@ public:
     friend std::istream& operator>>(std::istream& is, Block& s);
 
     /*****
-     * getId gets id
+     * getId gets id, id is identical to the qml id
      * */
     int getId() const;
 
     /*****
-     * getsStatus gets status
+     * getsStatus returns status
+     * status represents computational status of the block
+     * status 1 means, block has finished computation
+     * else it hasn't finished computation
      * */
     int getStatus() const;
 
+    /***********
+     * getValue returns computed value of the block
+     * */
     double getValue();
 
+    /*************
+     * getType returns computed type of the block
+     * */
     std::string getType();
 
+
+    /************
+     * checkForLoop performs loop check, guided by backtracking
+     * this method calls the same method for all connected blocks
+     * @param blockList list of blocks in branch during backtracking
+     * */
     int checkForLoops(std::vector<int>* blockList );
 
 };
